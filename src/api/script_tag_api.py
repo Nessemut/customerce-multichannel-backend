@@ -1,8 +1,7 @@
-from ..model.shop import Shop
-from django.shortcuts import redirect
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
-from .. import settings
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+
+from .. import settings
 
 
 @csrf_exempt

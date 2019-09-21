@@ -1,7 +1,9 @@
 import datetime
 from json import dumps, loads
-from django.conf import settings
+
 import requests
+from django.conf import settings
+
 from .. import settings
 from ..service.shop_manager import save_shop
 

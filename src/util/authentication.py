@@ -1,5 +1,7 @@
 from base64 import b64decode
-from django.http import JsonResponse, HttpResponse, QueryDict
+
+from django.http import HttpResponse
+
 from ..service.shop_manager import get_id, authentication_correct
 
 

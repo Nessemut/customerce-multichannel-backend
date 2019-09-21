@@ -1,10 +1,10 @@
 from django.http import JsonResponse, HttpResponse, QueryDict
+from django.views.decorators.csrf import csrf_exempt
 
 from src.model.shop import Shop
 from src.service.shop_manager import get_chat_info, get_merchant_info, get, get_image, save_image, update
 from ..util.authentication import authenticate
 from ..util.shopify_api import ShopifyApi
-from django.views.decorators.csrf import csrf_exempt
 
 
 def chat_info(req, shopname):

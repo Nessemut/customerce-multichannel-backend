@@ -1,6 +1,6 @@
+from django.db.utils import IntegrityError
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from django.db.utils import IntegrityError
 
 from .. import settings
 from ..model.shop import Shop

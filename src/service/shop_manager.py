@@ -1,15 +1,10 @@
-from ..model.shop import Shop
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from src.model.shop import Shop
-from django.core.files.base import ContentFile
-from src.form.shop_form import ShopForm
-from .. import settings
 import os
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+
 from django.conf import settings
-import tempfile
+from django.core.files.storage import default_storage
+
+from src.model.shop import Shop
+from .. import settings
 
 
 def get_id(name):

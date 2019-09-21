@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponse, QueryDict
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 

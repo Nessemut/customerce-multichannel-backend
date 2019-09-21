@@ -1,8 +1,9 @@
 from django.http import JsonResponse, HttpResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
-from ..util.authentication import authenticate, verify_object_ownership
+
 from ..model.faq import Faq
 from ..service.faq_manager import get_all, get_faq, create, update, delete
+from ..util.authentication import authenticate, verify_object_ownership
 
 
 @csrf_exempt
