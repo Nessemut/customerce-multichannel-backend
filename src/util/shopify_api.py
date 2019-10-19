@@ -84,12 +84,17 @@ class ShopifyApi:
         url = self.get_url('recurring_application_charges.json')
         trial_days = self.get_trial_period()
         test = settings.DEBUG or self.shop.name in settings.PAYMENT_FREE_SHOPS
+        if self.shop.name in settings.OLD_PRICE_SHOPS:
+            price = settings.OLD_APP_PRICE
+        else:
+            price = settings.APP_PRICE
+
         r = requests.post(
             url,
             data=dumps({
                 "recurring_application_charge": {
                     "name": "Recurring charge",
-                    "price": settings.APP_PRICE,
+                    "price": price,
                     "test": test,
                     "trial_days": trial_days,
                     "return_url": '{}/redirect?shop={}'.format(settings.APP_URL, self.shop.name)
