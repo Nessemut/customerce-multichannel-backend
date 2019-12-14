@@ -1,6 +1,6 @@
 from base64 import b64decode
 
-from django.http import HttpResponse
+from django.http import HttpResponse, QueryDict
 
 from ..service.shop_manager import get_id, authentication_correct
 
@@ -20,10 +20,14 @@ def authenticate(func):
     def wrapper(req, **kwargs):
 
         try:
-            authentication = str(b64decode(str(req.META['HTTP_AUTHORIZATION'][6:])))
+            #authentication = str(b64decode(str(req.META['HTTP_AUTHORIZATION'][6:])))
+            try:
+                authentication = req.GET['auth']
+            except KeyError:
+                authentication = QueryDict(req.body)['auth']
             separator_index = authentication.index(':')
-            shop = authentication[2:separator_index]
-            token = authentication[separator_index+1:len(authentication)-1]
+            shop = authentication[0:separator_index]
+            token = authentication[separator_index+1:len(authentication)]
 
             if not authentication_correct(shop, token):
                 return HttpResponse(status=401)

@@ -16,7 +16,7 @@ def get_all_from_shop(req, shop_id):
 def admin_post(req, **kwargs):
     shop_id = str(kwargs['shop_id'])
     if req.method != 'POST':
-        return HttpResponse(status=405)
+        admin_crud_object(req, **kwargs)
     try:
         form = QueryDict(req.body)
         create(form, shop_id)
@@ -28,7 +28,10 @@ def admin_post(req, **kwargs):
 @csrf_exempt
 @authenticate
 def admin_crud_object(req, **kwargs):
-    faq_id = kwargs['_id']
+    try:
+        faq_id = kwargs['_id']
+    except KeyError:
+        return JsonResponse({'error': 'Resource not found'}, status=404)
     shop_id = str(kwargs['shop_id'])
     if not verify_object_ownership(shop_id, faq_id, Faq):
         return JsonResponse({'error': 'You have no permisson to modify this resource'}, status=401)
