@@ -1,5 +1,4 @@
-from src.model.faq import Faq
-from ..model.shop import Shop
+from ..model import Faq, Shop
 
 
 def serialize(faq):

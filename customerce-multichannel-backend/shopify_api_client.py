@@ -2,17 +2,16 @@ import datetime
 from json import dumps, loads
 
 import requests
-from django.conf import settings
 
-from .. import settings
-from ..service.shop_manager import save_shop
+from . import settings
+from .service.shop_manager import save_shop
 
 REDIRECT_URL = "http://{}.myshopify.com/admin/oauth/authorize?client_id={}&redirect_uri={}&scope={}"
 SHOP_ADMIN_URL = "https://{}.myshopify.com/admin/{}"
 ACCESS_TOKEN_URL = "https://{}.myshopify.com/admin/oauth/access_token"
 
 
-class ShopifyApi:
+class ShopifyApiClient:
 
     def __init__(self, shop):
         self.shop = shop

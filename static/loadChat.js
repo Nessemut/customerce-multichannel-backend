@@ -27,5 +27,5 @@ loadScript("https://unpkg.com/react@16/umd/react.development.js", function() {
 	div.id = "chat_container";
 	document.getElementsByTagName("body")[0].append(div);
     loadScript(scriptPath, function() {});
-});
+  });
 });

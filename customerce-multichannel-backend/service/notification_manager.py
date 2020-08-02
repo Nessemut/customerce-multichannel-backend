@@ -1,5 +1,5 @@
-from src.model.notification import Notification
-from ..model.shop import Shop
+from ..model import Notification
+from ..model import Shop
 
 
 def serialize(notification):

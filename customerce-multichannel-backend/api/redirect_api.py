@@ -3,15 +3,15 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
 from .. import settings
-from ..model.shop import Shop
+from ..model import Shop
 from ..service.shop_manager import get_shop, create_shop
-from ..util.shopify_api import ShopifyApi
+from ..shopify_api_client import ShopifyApiClient
 
 
 def confirm(req):
     name = req.GET['shop'].replace('.myshopify.com', '')
     shop = get_shop(name)
-    api = ShopifyApi(shop)
+    api = ShopifyApiClient(shop)
     auth = req.GET['code']
     api.confirm_installation(auth)
     url = api.add_billing()
@@ -24,7 +24,7 @@ def install(req):
         shop = create_shop(name)
     except IntegrityError:
         shop = get_shop(name)
-    api = ShopifyApi(shop)
+    api = ShopifyApiClient(shop)
     return HttpResponseRedirect(api.redirect_to_install_confirmation())
 
 
@@ -39,7 +39,7 @@ def redirect(req):
         name = req.GET['shop'].replace('.myshopify.com', '')
         try:
             shop = get_shop(name)
-            shopify = ShopifyApi(shop)
+            shopify = ShopifyApiClient(shop)
             if shopify.token_valid():
                 shopify.activate_billing()
                 return HttpResponseRedirect('{}?shop={}&token={}'.format(

@@ -1,10 +1,9 @@
 from django.http import JsonResponse, HttpResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
 
-from src.model.shop import Shop
-from src.service.shop_manager import get_chat_info, get_merchant_info, get, get_image, save_image, update
-from ..util.authentication import authenticate
-from ..util.shopify_api import ShopifyApi
+from ..model import Shop
+from ..service.shop_manager import get_chat_info, get_merchant_info, get, get_image, save_image, update
+from ..shopify_api_client import ShopifyApiClient
 
 
 def chat_info(req, shopname):
@@ -15,23 +14,21 @@ def chat_info(req, shopname):
         return JsonResponse({'error': '{} does not exist'.format(shopname)})
 
 
-@authenticate
 def enable_button(req, **shop_id):
     if req.GET['enabled'] is not None:
         enable = req.GET['enabled'] == 'true'
         shop = get(shop_id)
         if enable and not shop.app_enabled:
-            api = ShopifyApi(shop)
+            api = ShopifyApiClient(shop)
             api.add_script_tag()
         elif not enable and shop.app_enabled:
-            api = ShopifyApi(shop)
+            api = ShopifyApiClient(shop)
             api.remove_script_tag()
         return HttpResponse(status=200)
     return JsonResponse({'error': 'Choice not provided'}, status=400)
 
 
 @csrf_exempt
-@authenticate
 def post_avatar_image(req, **kwargs):
     if req.method == 'POST':
         file = req.FILES.get('image')
@@ -46,7 +43,6 @@ def get_avatar_image(req, shopname):
 
 
 @csrf_exempt
-@authenticate
 def admin_crud(req, **kwargs):
     shop_id = str((kwargs['shop_id']))
     try:

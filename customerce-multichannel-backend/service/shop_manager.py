@@ -1,9 +1,8 @@
 import os
 
-from django.conf import settings
 from django.core.files.storage import default_storage
 
-from src.model.shop import Shop
+from ..model import Shop
 from .. import settings
 
 

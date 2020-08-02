@@ -17,6 +17,10 @@ from django.contrib import admin
 from django.urls import path
 
 from .api import shop_api, notification_api, faq_api, email_api, redirect_api, script_tag_api
+from .views import render_base_page, render_faq_page, render_notification_page
+
+APP_URL = 'app/'
+API_URL = 'api/v1/'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,10 +33,13 @@ urlpatterns = [
     path('redirect', redirect_api.redirect),
     path('install', redirect_api.install),
     path('install/confirm', redirect_api.confirm),
-    path('shop/<str:shopname>', shop_api.chat_info),
-    path('shop/image/<str:shopname>', shop_api.get_avatar_image),
-    path('notification/<int:shop_id>', notification_api.get_all_from_shop),
-    path('faq/<int:shop_id>', faq_api.get_all_from_shop),
-    path('sendemail', email_api.send),
-    path('scriptag', script_tag_api.script),
+    path(APP_URL, render_base_page),
+    path(APP_URL + 'faq', render_faq_page),
+    path(APP_URL + 'notification', render_notification_page),
+    path(API_URL + 'shop/<str:shopname>', shop_api.chat_info),
+    path(API_URL + 'shop/image/<str:shopname>', shop_api.get_avatar_image),
+    path(API_URL + 'notification/<int:shop_id>', notification_api.get_all_from_shop),
+    path(API_URL + 'faq/<int:shop_id>', faq_api.get_all_from_shop),
+    path(API_URL + 'sendemail', email_api.send),
+    path(API_URL + 'scriptag', script_tag_api.script),
 ]

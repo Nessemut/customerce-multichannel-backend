@@ -19,20 +19,28 @@ class Shop(models.Model):
     panel_color = models.CharField(max_length=6)
     panel_title = models.CharField(max_length=45)
     install_date = models.DateTimeField(auto_now=False)
+    free_billing = models.BooleanField()
 
-    @classmethod
-    def create(cls, name):
-        shop = cls(name=name)
-        shop.app_enabled = False
-        shop.panel_title = 'Contact us'
-        shop.panel_color = '5ee4ff'
-        shop.install_date = timezone.now()
-        shop.save()
-        return shop
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.app_enabled = False
+        self.panel_title = 'Contact us'
+        self.panel_color = '5ee4ff'
+        self.install_date = timezone.now()
 
-    @classmethod
-    def get(cls, name):
-        return Shop.objects.get(name=name)
 
-    class Meta:
-        db_table = "shop"
+class Notification(models.Model):
+    id = models.IntegerField
+    background_color = models.CharField(max_length=6)
+    font_color = models.CharField(max_length=6)
+    text = models.TextField(max_length=6)
+    time = models.IntegerField()
+    url = models.CharField(max_length=2083)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, db_column="shop_id")
+
+
+class Faq(models.Model):
+    id = models.IntegerField
+    question = models.TextField()
+    answer = models.TextField()
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, db_column="shop_id")

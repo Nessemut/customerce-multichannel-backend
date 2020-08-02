@@ -122,5 +122,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea/
-src/settings.py
+customerce-multichannel-backend/settings.py
 shop_images
