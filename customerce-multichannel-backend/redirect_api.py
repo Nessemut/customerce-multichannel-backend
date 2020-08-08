@@ -2,15 +2,14 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
-from .. import settings
-from ..model import Shop
-from ..service.shop_manager import get_shop, create_shop
-from ..shopify_api_client import ShopifyApiClient
+from . import settings
+from model import Shop
+from shopify_api_client import ShopifyApiClient
 
 
 def confirm(req):
     name = req.GET['shop'].replace('.myshopify.com', '')
-    shop = get_shop(name)
+    shop = Shop.objects.get(name=name)
     api = ShopifyApiClient(shop)
     auth = req.GET['code']
     api.confirm_installation(auth)
@@ -21,15 +20,16 @@ def confirm(req):
 def install(req):
     name = req.GET['shop'].replace('.myshopify.com', '')
     try:
-        shop = create_shop(name)
+        shop = Shop(name)
+        shop.save()
     except IntegrityError:
-        shop = get_shop(name)
-    api = ShopifyApiClient(shop)
+        shop = Shop.objects.get(name=name)
+    api = ShopifyApiClient(req.META['HTTP_HOST'], shop)
     return HttpResponseRedirect(api.redirect_to_install_confirmation())
 
 
-def redirect_to_installation(shopname):
-    return HttpResponseRedirect('{}/install?shop={}'.format(settings.APP_URL, shopname))
+def redirect_to_installation(req, shopname):
+    return HttpResponseRedirect('{}/install?shop={}'.format(req.META['HTTP_HOST'], shopname))
 
 
 @csrf_exempt
@@ -38,13 +38,13 @@ def redirect(req):
     if req.GET['shop'] is not None:
         name = req.GET['shop'].replace('.myshopify.com', '')
         try:
-            shop = get_shop(name)
+            shop = Shop.objects.get(name=name)
             shopify = ShopifyApiClient(shop)
             if shopify.token_valid():
                 shopify.activate_billing()
                 return HttpResponseRedirect('{}?shop={}&token={}'.format(
                     settings.FRONTEND_URL, name, shop.token))
             else:
-                return redirect_to_installation(name)
+                return redirect_to_installation(req, name)
         except Shop.DoesNotExist:
-            return redirect_to_installation(name)
+            return redirect_to_installation(req, name)

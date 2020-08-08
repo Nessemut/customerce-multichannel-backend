@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.contrib.auth import authenticate
+
+shop = authenticate(username='john', password='secret')
 
 
 def render_base_page(request):

@@ -123,4 +123,6 @@ dmypy.json
 .pyre/
 .idea/
 customerce-multichannel-backend/settings.py
+
 shop_images
+!shop_images/default.png

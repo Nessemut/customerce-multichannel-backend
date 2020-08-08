@@ -1,10 +1,8 @@
-import datetime
 from json import dumps, loads
 
 import requests
 
 from . import settings
-from .service.shop_manager import save_shop
 
 REDIRECT_URL = "http://{}.myshopify.com/admin/oauth/authorize?client_id={}&redirect_uri={}&scope={}"
 SHOP_ADMIN_URL = "https://{}.myshopify.com/admin/{}"
@@ -13,8 +11,9 @@ ACCESS_TOKEN_URL = "https://{}.myshopify.com/admin/oauth/access_token"
 
 class ShopifyApiClient:
 
-    def __init__(self, shop):
+    def __init__(self, host, shop):
         self.shop = shop
+        self.app_url = host
 
     def build_header(self):
         header = {
@@ -42,13 +41,13 @@ class ShopifyApiClient:
         )
 
         self.shop.token = (r.json()["access_token"])
-        save_shop(self.shop)
+        self.shop.objects.save()
 
     def redirect_to_install_confirmation(self):
         url = REDIRECT_URL.format(
             self.shop.name,
             settings.SHOPIFY_API_KEY,
-            "{}/install/confirm".format(settings.APP_URL),
+            "{}/install/confirm".format(self.app_url),
             settings.APP_SCOPES)
         return url
 
@@ -61,7 +60,7 @@ class ShopifyApiClient:
                 data=dumps({
                     "script_tag": {
                         "event": "onload",
-                        "src": settings.APP_URL + '/scriptag'
+                        "src": self.app_url + '/scriptag'
                     }
                 }),
                 headers=self.build_header()
@@ -69,7 +68,7 @@ class ShopifyApiClient:
 
             if r.status_code == 201:
                 self.shop.script_tag_id = loads(r.content)['script_tag']['id']
-                save_shop(self.shop)
+                self.shop.objects.save()
 
     def remove_script_tag(self):
         url = self.get_url('script_tags/{}.json'.format(self.shop.script_tag_id))
@@ -77,16 +76,14 @@ class ShopifyApiClient:
 
         if r.status_code == 200:
             self.shop.script_tag_id = None
-            save_shop(self.shop)
+            self.shop.objects.save()
 
     def add_billing(self):
         url = self.get_url('recurring_application_charges.json')
-        trial_days = self.get_trial_period()
-        test = settings.DEBUG or self.shop.name in settings.PAYMENT_FREE_SHOPS
-        if self.shop.name in settings.OLD_PRICE_SHOPS:
-            price = settings.OLD_APP_PRICE
-        else:
-            price = settings.APP_PRICE
+        trial_days = self.shop.get_trial_period()
+        test = settings.DEBUG or self.shop.free_billing
+
+        price = 0 if test else settings.APP_PRICE
 
         r = requests.post(
             url,
@@ -96,7 +93,7 @@ class ShopifyApiClient:
                     "price": price,
                     "test": test,
                     "trial_days": trial_days,
-                    "return_url": '{}/redirect?shop={}'.format(settings.APP_URL, self.shop.name)
+                    "return_url": '{}/redirect?shop={}'.format(self.app_url, self.shop.name)
                 }
             }),
             headers=self.build_header()
@@ -105,7 +102,7 @@ class ShopifyApiClient:
         if r.status_code == 201:
             rdict = loads(r.content)['recurring_application_charge']
             self.shop.billing_id = rdict['id']
-            save_shop(self.shop)
+            self.shop.objects.save()
             return rdict['confirmation_url']
 
         return None
@@ -114,14 +111,3 @@ class ShopifyApiClient:
         url = self.get_url('recurring_application_charges/{}/activate.json'.format(self.shop.billing_id))
         r = requests.post(url, headers=self.build_header())
         return r.status_code
-
-    def get_trial_period(self):
-        installed = datetime.datetime.strptime(str(self.shop.install_date)[:19], '%Y-%m-%d %H:%M:%S')
-        today = datetime.datetime.today()
-        period = settings.APP_TRIAL_PERIOD - (today - installed).days
-
-        if period < 0:
-            return 0
-        if period > settings.APP_TRIAL_PERIOD:
-            return settings.APP_TRIAL_PERIOD
-        return period
