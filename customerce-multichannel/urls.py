@@ -14,27 +14,31 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-
-from .api import api_views, notification_api, faq_api, email_api, script_tag_api
-import redirect_api
-from .views import render_base_page, render_faq_page, render_notification_page
+from django.urls import path, include
+from django.conf.urls import url
+from .api_views import *
+from .redirect_api import *
+from .views import *
 
 APP_URL = 'app/'
 API_URL = 'api/v1/'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('redirect', redirect_api.redirect),
-    path('install', redirect_api.install),
-    path('install/confirm', redirect_api.confirm),
-    path(APP_URL, render_base_page),
+    path('redirect', redirect),
+    path('install', install),
+    path('install/confirm', confirm),
+    path('', render_channels_page),
+    path(APP_URL, render_shop_page),
+    path(APP_URL + 'shop', render_shop_page),
+    path(APP_URL + 'channels', render_channels_page),
     path(APP_URL + 'faq', render_faq_page),
     path(APP_URL + 'notification', render_notification_page),
-    path(API_URL + 'shop/<str:shopname>', api_views.chat_info),
-    path(API_URL + 'shop/image/<str:shopname>', api_views.get_avatar_image),
-    path(API_URL + 'notification/<int:shop_id>', notification_api.get_all_from_shop),
-    path(API_URL + 'faq/<int:shop_id>', faq_api.get_all_from_shop),
-    path(API_URL + 'sendemail', email_api.send),
-    path(API_URL + 'scriptag', script_tag_api.script),
+    path(APP_URL + 'notification/<int:id>', notification_create),
+    path(API_URL + 'shop/<str:shopname>', ShopApi.chat_info),
+    path(API_URL + 'shop/image/<str:shopname>', ShopApi.get_avatar_image),
+    path(API_URL + 'notification/<int:shop_id>', NotificationApi.get_all),
+    path(API_URL + 'faq/<int:shop_id>', FaqApi.get_all),
+    path(API_URL + 'sendemail', EmailApi.send),
+    path(API_URL + 'scriptag', ScriptTagApi.script),
 ]

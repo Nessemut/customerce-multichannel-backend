@@ -1,0 +1,52 @@
+.sidenav {
+    height: 100%;
+    width: 15%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #330033;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #b1b1b1;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+body {
+    background-color: #555555;
+}
+
+.title {
+    margin-top: 2%;
+}
+
+#shop_avatar {
+    height: 128px;
+    border-radius: 50%;
+}
+
+.customizable-feature {
+    padding: 15px;
+}
+
+.faq-question-textarea {
+    margin-bottom: 2px;
+}
+
+.customizable-feature-buttons {
+    padding: 4px;
+}
+
+#new-customizable-feature-button {
+    margin-top: 2%;
+}

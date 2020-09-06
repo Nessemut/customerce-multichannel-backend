@@ -58,6 +58,7 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+**/migrations
 
 # Flask stuff:
 instance/
@@ -122,7 +123,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea/
-customerce-multichannel-backend/settings.py
+customerce-multichannel/settings.py
 
-shop_images
-!shop_images/default.png
+#Database file
+database
+
+!static/shop_images/default.png
+static/shop_images

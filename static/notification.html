@@ -1,5 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>NOTIFICATION</h1>
-    <div class="col-lg-8">NOTIFICATION PAGE</div>
+
+    <h1 class="title">Notifications</h1>
+    <hr/>
+
+    {% for notification in notifications %}
+
+        <form action="/app/notification/{{ notification.id }}" method="post">
+            {% csrf_token %}
+            <div class="customizable-feature form-group">
+                <div class="notification-question-textarea">
+                    <textarea name="text" class="form-control" rows="1">{{ notification.text }}</textarea>
+                </div>
+
+                <div class="customizable-feature-buttons">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </div>
+
+            </div>
+        </form>
+    {% endfor %}
+
+    <button type="button" class="btn btn-outline-primary new-customizable-feature-button">
+        New notification
+    </button>
+
 {% endblock %}

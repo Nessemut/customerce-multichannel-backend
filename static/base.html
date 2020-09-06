@@ -5,57 +5,29 @@
     <title>Customerce Shop Admin</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
     <link rel="shortcut icon" href="{% static 'favicon.png' %}">
-
-    <!-- TODO: move to css file -->
-    <style type="text/css">
-        .sidenav {
-            height: 100%;
-            width: 10%;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: #330033;
-            overflow-x: hidden;
-            padding-top: 20px;
-        }
-
-        .sidenav a {
-            padding: 6px 8px 6px 16px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #b1b1b1;
-            display: block;
-        }
-
-        .sidenav a:hover {
-            color: #f1f1f1;
-        }
-
-        body {
-            background-color: #555555;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
 </head>
 
 <body style="background-color: ghostwhite">
-<div class="container p-3 mb-2 bg-gradient-dark">
-    <div class="row">
-        <div class="col-12">
-            <div class="sidenav">
-                <a href="/app/">Home</a>
-                <a href="/app/notification">Notifications</a>
-                <a href="/app/faq">FAQ</a>
-            </div>
-            {% block content %}
 
-            {% endblock %}
-        </div>
+<div class="container bg-gradient-dark">
+    <div class="sidenav">
+        <a href="/app/shop">My shop</a>
+        <a href="/app/channels">Channels</a>
+        <a href="/app/notification">Notifications</a>
+        <a href="/app/faq">FAQ</a>
     </div>
+
+    {% block content %}
+    {% endblock %}
+
 </div>
 </body>
 </html>
