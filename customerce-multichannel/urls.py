@@ -19,22 +19,29 @@ from django.conf.urls import url
 from .api_views import *
 from .redirect_api import *
 from .views import *
+from . import redirect_api
+from . import views
 
 APP_URL = 'app/'
 API_URL = 'api/v1/'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('redirect', redirect),
+    path('redirect', redirect_api.redirect),
     path('install', install),
     path('install/confirm', confirm),
-    path('', render_channels_page),
-    path(APP_URL, render_shop_page),
-    path(APP_URL + 'shop', render_shop_page),
-    path(APP_URL + 'channels', render_channels_page),
-    path(APP_URL + 'faq', render_faq_page),
-    path(APP_URL + 'notification', render_notification_page),
-    path(APP_URL + 'notification/<int:id>', notification_create),
+    path('', views.render_channels_page),
+    path(APP_URL, views.render_shop_page),
+    path(APP_URL + 'shop', views.render_shop_page),
+    path(APP_URL + 'channels', views.render_channels_page),
+    path(APP_URL + 'faq', views.render_faq_page),
+    path(APP_URL + 'notification', views.render_notification_page),
+    path(APP_URL + 'notification/create/', views.notification_create),
+    path(APP_URL + 'notification/update/<int:id>', views.notification_update),
+    path(APP_URL + 'notification/delete/<int:id>', views.notification_delete),
+    path(APP_URL + 'faq/create/', views.faq_create),
+    path(APP_URL + 'faq/update/<int:id>', views.faq_update),
+    path(APP_URL + 'faq/delete/<int:id>', views.faq_delete),
     path(API_URL + 'shop/<str:shopname>', ShopApi.chat_info),
     path(API_URL + 'shop/image/<str:shopname>', ShopApi.get_avatar_image),
     path(API_URL + 'notification/<int:shop_id>', NotificationApi.get_all),

@@ -1,28 +1,57 @@
 {% extends 'base.html' %}
 {% block content %}
+    <script>
+        function toggleNewButton() {
+            const x = document.getElementById("new-notification");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
 
     <h1 class="title">Notifications</h1>
     <hr/>
 
     {% for notification in notifications %}
 
-        <form action="/app/notification/{{ notification.id }}" method="post">
-            {% csrf_token %}
+        <form method="post">{% csrf_token %}
             <div class="customizable-feature form-group">
                 <div class="notification-question-textarea">
                     <textarea name="text" class="form-control" rows="1">{{ notification.text }}</textarea>
                 </div>
 
                 <div class="customizable-feature-buttons">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-primary"
+                            formaction="/app/notification/update/{{ notification.id }}">
+                        Save
+                    </button>
+                    <button type="submit" class="btn btn-danger"
+                            formaction="/app/notification/delete/{{ notification.id }}">
+                        Delete
+                    </button>
                 </div>
 
             </div>
         </form>
     {% endfor %}
 
-    <button type="button" class="btn btn-outline-primary new-customizable-feature-button">
+    <div id="new-notification" style="display: none">
+        <form action="/app/notification/create/" method="post">{% csrf_token %}
+            <div class="customizable-feature form-group">
+                <div class="notification-question-textarea">
+                    <textarea name="text" class="form-control" rows="1"></textarea>
+                </div>
+
+                <div class="customizable-feature-buttons">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <button type="button" class="btn btn-outline-primary new-customizable-feature-button" onclick="toggleNewButton()">
         New notification
     </button>
 

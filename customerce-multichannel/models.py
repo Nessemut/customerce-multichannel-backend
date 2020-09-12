@@ -96,7 +96,7 @@ class Notification(models.Model):
     background_color = models.CharField(max_length=6)
     font_color = models.CharField(max_length=6)
     text = models.TextField(max_length=128)
-    time = models.IntegerField()
+    time = models.IntegerField(default=60)
     url = models.CharField(max_length=2083)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, db_column="shop_id")
 

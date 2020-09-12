@@ -8,15 +8,13 @@ from .shopify_api_client import ShopifyApiClient
 
 class ShopApi:
 
-    @staticmethod
-    def chat_info(req, shopname):
+    def chat_info(self, req, shopname):
         try:
             shop = Shop.objects.get(name=shopname)
             return JsonResponse(shop.serialize())
         except Shop.DoesNotExist:
             return JsonResponse({'error': '{} does not exist'.format(shopname)}, status=404)
 
-    @staticmethod
     def enable_button(self, req, **shop_id):
         # TODO: move this to frontend
         if req.GET['enabled'] is not None:
@@ -31,46 +29,43 @@ class ShopApi:
             return HttpResponse(status=200)
         return JsonResponse({'error': 'Choice not provided'}, status=400)
 
-    @staticmethod
-    def get_avatar_image(req, shopname):
+    def get_avatar_image(self, req, shopname):
         shop = Shop.objects.get(name=shopname)
         return HttpResponse(shop.get_image(), content_type="image/png")
 
 
 class NotificationApi:
 
-    @staticmethod
-    def get_notification(notification_id):
+    def get_notification(self, notification_id):
         notification = Notification.objects.get(pk=notification_id)
         res = {'notification': notification.serialize()}
-        return res
+        return JsonResponse(res)
 
-    @staticmethod
-    def get_all(shop_id):
+    def get_all(self, shop_id):
         notifs = Notification.objects.filter(shop_id=shop_id)
         notif_list = []
         for notification in notifs:
             notif_list.append(notification.serialize())
         res = {"notifications": notif_list}
-        return res
+        return JsonResponse(res)
 
 
 class FaqApi:
 
-    @staticmethod
-    def get_all(shop_id):
+    def get_all(self, shop_id):
         faqs = Faq.objects.filter(shop_id=shop_id)
         faq_list = []
         for faq in faqs:
             faq_list.append(faq.serialize())
         res = {"notifications": faq_list}
-        return res
+        return JsonResponse(res)
 
 
 class ScriptTagApi:
 
     @staticmethod
     def script(req):
+        # TODO: we should generate the script on the go depending on working environment
         with open('{}{}loadChat.js'.format(settings.APP_ABSOLUTE_PATH, settings.STATIC_URL), "rb") as f:
             return HttpResponse(f.read(), content_type="application/javascript")
 

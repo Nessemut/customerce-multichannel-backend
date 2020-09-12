@@ -18,4 +18,4 @@ class NotificationForm(forms.ModelForm):
 class FaqForm(forms.ModelForm):
     class Meta:
         model = Faq
-        fields = ['id', 'question', 'answer']
+        fields = ['question', 'answer']
