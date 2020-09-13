@@ -5,24 +5,27 @@
     <h1 class="title">Channels</h1>
     <hr/>
 
-    <form action="/" method="post">
+    <form action="/app/channels/update" method="post">{% csrf_token %}
 
         <div class="container my-4">
 
             <div class="form-group funkyradio">
 
                 <div class="funkyradio-primary">
-                    <input type="checkbox" name="checkbox" id="checkbox-email" checked/>
+                    <input name="email_active" type="checkbox" id="checkbox-email"
+                           {% if shop.email_active %}checked{% endif %}/>
                     <label for="checkbox-email">Use email</label>
                 </div>
 
                 <div class="funkyradio-primary">
-                    <input type="checkbox" name="checkbox" id="checkbox-facebook" checked/>
+                    <input name="facebook_active" type="checkbox" id="checkbox-facebook"
+                           {% if shop.facebook_active %}checked{% endif %}/>
                     <label for="checkbox-facebook">Use Facebook</label>
                 </div>
 
                 <div class="funkyradio-primary">
-                    <input type="checkbox" name="checkbox" id="checkbox-whatsapp" checked/>
+                    <input name="whatsapp_active" type="checkbox" id="checkbox-whatsapp"
+                           {% if shop.whatsapp_active %}checked{% endif %}/>
                     <label for="checkbox-whatsapp">Use WhatsApp</label>
                 </div>
 
@@ -32,17 +35,20 @@
 
                 <div class="form-group w-25">
                     <label for="email">Email address:</label>
-                    <input type="email" class="form-control" id="email" style="width: 350px">
+                    <input name="email" type="email" class="form-control" id="email" value="{{ shop.email }}"
+                           style="width: 350px">
                 </div>
 
                 <div class="form-group w-50">
                     <label for="facebook-page">Facebook page:</label>
-                    <input type="url" class="form-control" id="facebook-page" style="width: 50%">
+                    <input name="facebook_page" type="url" class="form-control" id="facebook-page"
+                           value="{{ shop.facebook_page }}" style="width: 600px">
                 </div>
 
                 <div class="form-group w-25">
                     <label for="whatsapp-number">WhatsApp number:</label>
-                    <input type="tel" class="form-control" id="whatsapp-number" style="width: 180px">
+                    <input name="whatsapp_number" type="tel" class="form-control" id="whatsapp-number"
+                           value="{{ shop.whatsapp_number }}" style=" width: 180px">
                     <small id="emailHelp" class="form-text text-muted">Please include the country code. Example:
                         +34</small>
                 </div>

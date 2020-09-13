@@ -13,7 +13,7 @@ def render_shop_page(request):
 
 
 def render_channels_page(request):
-    return render(request, 'channels.html')
+    return render(request, 'channels.html', {"shop": shop})
 
 
 def render_faq_page(request):
@@ -22,6 +22,13 @@ def render_faq_page(request):
 
 def render_notification_page(request):
     return render(request, 'notification.html', {"notifications": shop.notification_set.all()})
+
+
+def channels_update(request):
+    form = ChannelsForm(request.POST or None, instance=shop)
+    if form.is_valid():
+        form.save()
+    return render_channels_page(request)
 
 
 def notification_create(request):

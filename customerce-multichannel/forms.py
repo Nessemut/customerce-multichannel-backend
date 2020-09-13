@@ -3,10 +3,17 @@ from django import forms
 from .models import *
 
 
-class ShopForm(forms.ModelForm):
+class ChannelsForm(forms.ModelForm):
     class Meta:
         model = Shop
-        fields = ['email', 'whatsapp_text']
+        fields = [
+            'email_active',
+            'facebook_active',
+            'whatsapp_active',
+            'email',
+            'facebook_page',
+            'whatsapp_number'
+        ]
 
 
 class NotificationForm(forms.ModelForm):
