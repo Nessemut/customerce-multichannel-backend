@@ -8,7 +8,7 @@ from .shopify_api_client import ShopifyApiClient
 
 class ShopApi:
 
-    def chat_info(self, req, shopname):
+    def chat_info(self, shopname):
         try:
             shop = Shop.objects.get(name=shopname)
             return JsonResponse(shop.serialize())
