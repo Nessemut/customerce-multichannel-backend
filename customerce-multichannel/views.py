@@ -12,8 +12,25 @@ def render_shop_page(request):
     return render(request, 'shop.html', {"shop": shop})
 
 
+def shop_update(request):
+    if request.method == 'POST':
+        form = ShopForm(request.POST, request.FILES, instance=shop)
+        file = request.FILES['image'].file.read()
+        shop.save_image(file)
+        if form.is_valid():
+            form.save()
+    return render_shop_page(request)
+
+
 def render_channels_page(request):
     return render(request, 'channels.html', {"shop": shop})
+
+
+def channels_update(request):
+    form = ChannelsForm(request.POST or None, instance=shop)
+    if form.is_valid():
+        form.save()
+    return render_channels_page(request)
 
 
 def render_faq_page(request):
@@ -22,13 +39,6 @@ def render_faq_page(request):
 
 def render_notification_page(request):
     return render(request, 'notification.html', {"notifications": shop.notification_set.all()})
-
-
-def channels_update(request):
-    form = ChannelsForm(request.POST or None, instance=shop)
-    if form.is_valid():
-        form.save()
-    return render_channels_page(request)
 
 
 def notification_create(request):

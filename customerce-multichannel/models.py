@@ -37,12 +37,9 @@ class Shop(models.Model):
         self.install_date = timezone.now()
 
     def get_image(self):
-        try:
-            with open('{}/{}.png'.format(settings.AVATAR_PATH, self.name), "rb") as f:
-                return f.read()
-        except FileNotFoundError:
-            with open('{}/default.png'.format(settings.AVATAR_PATH), "rb") as f:
-                return f.read()
+        full_image_path = settings.APP_ABSOLUTE_PATH + self.get_avatar_path()
+        with open(full_image_path, "rb") as f:
+            return f.read()
 
     def get_avatar_path(self):
         custom_image = settings.AVATAR_PATH + '/' + self.name + '.png'
@@ -51,11 +48,10 @@ class Shop(models.Model):
         return settings.AVATAR_PATH + '/default.png'
 
     def save_image(self, file):
-        dest = '{}/{}.png'.format(settings.AVATAR_PATH, self.name)
+        dest = '{}{}/{}.png'.format(settings.APP_ABSOLUTE_PATH, settings.AVATAR_PATH, self.name)
         try:
             with default_storage.open(dest, 'wb+') as destination:
-                for chunk in file.chunks():
-                    destination.write(chunk)
+                destination.write(file)
         except AttributeError:
             os.remove(dest)
 

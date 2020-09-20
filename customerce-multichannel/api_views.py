@@ -29,7 +29,7 @@ class ShopApi:
             return HttpResponse(status=200)
         return JsonResponse({'error': 'Choice not provided'}, status=400)
 
-    def get_avatar_image(self, req, shopname):
+    def get_avatar_image(self, shopname):
         shop = Shop.objects.get(name=shopname)
         return HttpResponse(shop.get_image(), content_type="image/png")
 

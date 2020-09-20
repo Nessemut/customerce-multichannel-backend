@@ -33,6 +33,7 @@ urlpatterns = [
     path('', views.render_channels_page),
     path(APP_URL, views.render_shop_page),
     path(APP_URL + 'shop', views.render_shop_page),
+    path(APP_URL + 'shop/update', views.shop_update),
     path(APP_URL + 'channels', views.render_channels_page),
     path(APP_URL + 'channels/update', views.channels_update),
     path(APP_URL + 'notification', views.render_notification_page),

@@ -3,6 +3,15 @@ from django import forms
 from .models import *
 
 
+class ShopForm(forms.ModelForm):
+    class Meta:
+        model = Shop
+        fields = [
+            'app_enabled',
+            'panel_title'
+        ]
+
+
 class ChannelsForm(forms.ModelForm):
     class Meta:
         model = Shop

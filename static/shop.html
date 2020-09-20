@@ -4,7 +4,8 @@
 
     <h1 class="title">My shop</h1>
     <hr/>
-    <form action="/" method="post">
+
+    <form action="/app/shop/update" method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-group funkyradio">
             <div class="funkyradio-primary form-group">
                 <input type="checkbox" name="checkbox" id="checkbox-email" checked/>
@@ -12,20 +13,10 @@
             </div>
         </div>
 
-        <div>
-            <img src="{{ shop.get_avatar_path }}" id="shop_avatar">
+        <img src="{{ shop.get_avatar_path }}" id="shop_avatar">
+        <input type="file" id="image-input" name="image" class="btn btn-outline-primary">
 
-            <button type="submit" class="btn btn-outline-primary">Change avatar</button>
-
-            <form action="/" method="post">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
-        </div>
-    </form>
-
-
-    <form action="/" method="post">
-
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
 
 {% endblock %}
